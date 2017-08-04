@@ -1,0 +1,257 @@
+<apex:page showHeader="true" sidebar="true" title="Filters Overview" controller="FiltersController">
+    <style>
+        .hiddenRow {
+           z-index: 5;
+           padding: 4px;
+           visibility: hidden;
+           background-color: #f9f9f9;
+           opacity: 0;
+           position: absolute;
+           left: 20%;
+           -webkit-transition-duration: 0.3s;
+           -moz-transition-duration: 0.3s;
+           -o-transition-duration: 0.3s;
+           transition-duration: 0.3s;
+
+           -webkit-border-radius: 0px 0px 5px 5px;
+           -moz-border-radius: 0px 0px 5px 5px;
+
+           -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.2) inset;
+                 -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.2) inset;
+                      box-shadow:0 1px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.2) inset;
+          }
+          .dropRow:hover .hiddenRow {
+           visibility: visible;
+           opacity: 1;
+           left: 20%;
+          }
+          .dropRow .hiddenRow:hover {
+           visibility: hidden;
+           opacity: 0;
+           left: 20%;
+          }
+    </style>
+    <apex:stylesheet value="{!URLFOR($Resource.Deduper, 'bootstrap/css/bootstrap-namespacer.herokuapp.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.Deduper, 'jquery/jquery-2.1.4.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.Deduper, 'bootstrap/js/bootstrap.min.js')}"/>
+
+        <apex:sectionHeader title="{!$Label.ApplicationName}" subtitle="{!$Label.Filter}"/>
+        <apex:form id="commonForm">
+            <apex:pageBlock id="filterSection">
+                <apex:actionFunction name="disableMatchOnCondition" action="{!disableMatchOnCondition}" reRender="filterSection" >
+                </apex:actionFunction>
+                <apex:actionFunction name="sourceObjTypeAct" action="{!sourceObjTypeAct}" reRender="filterSection" >
+                </apex:actionFunction>
+                <apex:actionFunction name="targetObjTypeAct" action="{!targetObjTypeAct}" reRender="filterSection" >
+                </apex:actionFunction>
+                <apex:actionFunction name="rerenderPriority" action="{!rerenderPriority}" reRender="filterSection" >
+                </apex:actionFunction>
+                <apex:pageBlockButtons location="top">
+                    <apex:commandButton value="{!$Label.Create}" action="{!saveFilter}" styleClass="btn-sm btn-default"
+                            rerender="filterSection,filtersListSection,showmsg" status="load"/>
+                </apex:pageBlockButtons>
+                    <apex:pageMessages id="showmsg"></apex:pageMessages>
+                    <apex:pageBlockSection id="filterSection">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Name"/>
+                            <apex:inputText value="{!filterName}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.SourceObjTypeHelpText}">
+                            <apex:outputLabel value="{!$Label.SourceObjectType}"/>
+                            <apex:selectList value="{!sourceObjectType}" multiselect="false" size="1" >
+                                <apex:actionSupport event="onchange" action="{!fillFilterSourceRecordTypes}"
+                                                    reRender="filterSection,filtersListSection,showmsg"
+                                                    status="load" />
+                                <apex:selectOptions value="{!filterTypes}"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.TargetObjTypeHelpText}">
+                            <apex:outputLabel value="{!$Label.TargetObjectType}"/>
+                            <apex:selectList value="{!targetObjectType}" multiselect="false" size="1" >
+                            <apex:actionSupport event="onchange" action="{!fillFilterTargetRecordTypes}"
+                                                    reRender="filterSection,filtersListSection,showmsg"
+                                                    status="load" />
+                                <apex:selectOptions value="{!filterTypes}"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.SourceObjRecTypeHelpText}" rendered="{!IF( filterSourceRecordTypes.size = 1, false, true)}">
+                            <apex:outputLabel value="{!$Label.SourceObjectRecordType}"/>
+                            <apex:selectList value="{!sourceObjectRecordType}" multiselect="false" size="1">
+                                <apex:actionSupport event="onchange"
+                                                    reRender="filterSection,filtersListSection,showmsg"
+                                                    status="load" />
+                                <apex:selectOptions value="{!filterSourceRecordTypes}"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!IF( filterSourceRecordTypes.size = 1, true, false)}">
+                            <apex:outputLabel value="{!$Label.SourceObjectRecordType}"/>
+                            <apex:outputText value="{!$Label.NoRecordTypesAvailable}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.TargetObjRecTypeHelpText}" rendered="{!IF( filterTargetRecordTypes.size = 1, false, true)}">
+                            <apex:outputLabel value="{!$Label.TargetObjectRecordType}"/>
+                            <apex:selectList value="{!targetObjectRecordType}" multiselect="false" size="1" >
+                                <apex:actionSupport event="onchange"
+                                                    reRender="filterSection,filtersListSection,showmsg"
+                                                    status="load" />
+                                <apex:selectOptions value="{!filterTargetRecordTypes}"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!IF( filterTargetRecordTypes.size = 1, true, false)}">
+                            <apex:outputLabel value="{!$Label.TargetObjectRecordType}"/>
+                            <apex:outputText value="{!$Label.NoRecordTypesAvailable}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!IF( statusesFlag = 0, true, false)}">
+                            <apex:outputLabel value="{!$Label.TargetObjectStatuses}"/>
+                            <apex:outputText value="{!$Label.NoTargetObjectStatusesAvailable}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!IF( statusesFlag = 0, false, true)}">
+                            <apex:outputLabel value="{!$Label.TargetObjectStatuses}"/>
+
+                            <apex:panelGrid columns="3" id="abcd" style="text-align: center;">
+                                <apex:outputLabel value="Available"/>
+                                <apex:outputLabel value=""/>
+                                <apex:outputLabel value="Selected"/>
+
+                                <apex:selectList id="sel1" value="{!leftSelected}" multiselect="true" style="width:150px" size="5">
+                                    <apex:selectOptions value="{!unselectedValues}" />
+                                </apex:selectList>
+
+                                <apex:panelGroup >
+                                    <br/>
+                                    <apex:image value="{!$Resource.multiselected}">
+                                        <apex:actionSupport event="onclick" action="{!selectclick}" reRender="abcd,filterSection,filtersListSection,showmsg" status="load"/>
+                                    </apex:image>
+                                    <br/><br/>
+                                    <apex:image value="{!$Resource.multiunselected}">
+                                        <apex:actionSupport event="onclick" action="{!unselectclick}" reRender="abcd,filterSection,filtersListSection,showmsg" status="load"/>
+                                    </apex:image>
+                                </apex:panelGroup>
+
+                                <apex:selectList id="sel2" value="{!rightSelected}" multiselect="true" style="width:150px" size="5">
+                                    <apex:selectOptions value="{!selectedValues}" />
+                                </apex:selectList>
+
+                            </apex:panelGrid>
+
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.MatchOnConditionHelpText}" >
+                            <apex:outputLabel value="{!$Label.MatchOnInsert}"/>
+                            <apex:selectList value="{!selectedMatchOnInsert}" multiselect="false" size="1" disabled="{!isMatchOnConditionDisabled}">
+                                <apex:actionSupport event="onchange"
+                                                    reRender="filterSection,filtersListSection,showmsg"
+                                                    status="load" />
+                                <apex:selectOptions value="{!optionsMatchOnInsert}" />
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.MatchOnConditionHelpText}">
+                            <apex:outputLabel value="{!$Label.MatchOnUpdate}"/>
+                            <apex:selectList value="{!selectedMatchOnUpdate}" multiselect="false" size="1" disabled="{!isMatchOnConditionDisabled}">
+                                <apex:actionSupport event="onchange"
+                                                    reRender="filterSection,filtersListSection,showmsg"
+                                                    status="load" />
+                                <apex:selectOptions value="{!optionsMatchOnUpdate}" />
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.ActiveCheckboxHelpText}">
+                            <apex:outputLabel value="{!$Label.Active}"/>
+                            <apex:inputField value="{!filter.Active__c}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.MatchLogicHelpText}">
+                            <apex:outputLabel value="{!$Label.MatchLogic}"/>
+                            <apex:selectList value="{!selectedMatchLogic}" multiselect="false" size="1"
+                                             label="{!$Label.MatchLogic}">
+                                <apex:selectOptions value="{!optionsMatchLogic}" />
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.AutoMergeHelpText}" rendered="{!showTaskAction == true}">
+                            <apex:outputLabel value="{!$Label.AutoMerge}"/>
+                                <apex:inputCheckbox value="{!autoMergeValue}"
+                                          onchange="disableMatchOnCondition();"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.SearchAllRecordsHelpText}">
+                            <apex:outputLabel value="{!$Label.SearchAllRecords}"/>
+                            <apex:inputField value="{!filter.SearchAllRecords__c}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem helpText="{!$Label.CreateTasksForAlertHelpText}" rendered="{!showTaskAction == true}">
+                            <apex:outputLabel value="{!$Label.CreateTasksForAlert}"/>
+                            <apex:selectList value="{!selectedCreateTasks}" multiselect="false" size="1">
+                                  <apex:selectOptions value="{!optionsCreateTasks}" />
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                        <apex:inputCheckbox value="{!createNewDataTask}" label="{!$Label.CreateNewDataTask}" rendered="{!IF(isSourceLead = true && isTargetLead = true, true, false)}"/>
+                        <apex:pageBlockSectionItem helpText="{!$Label.PriorityHelpText}" >
+                            <apex:outputLabel value="{!$Label.Priority}"/>
+                            <apex:selectList value="{!priority}" multiselect="false" size="1" >
+                              <apex:selectOptions value="{!items}"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:pageBlock id="filtersListSection">
+                <apex:pageBlockTable value="{!filters}" var="filter"
+                             rendered="{!filters.size != 0}" styleClass="table-hover">
+                    <apex:column headerValue="{!$Label.Action}">
+                                <apex:commandLink onclick="if(!confirm('Are you sure?')){ return false; } deleteFilter('{!filter.Id}'); return false;"
+                                                  styleClass="btn-sm btn-link">
+                                    {!$Label.Delete}
+                                </apex:commandLink>
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.Name}" >
+                        <div class="dropRow">
+                            <apex:outputLink value="/apex/FilterDetails?Filter={!filter.id}">{!filter.Name}</apex:outputLink>
+                            <div class="hiddenRow">
+                                {!filter.SourceObjectType__c} ({!IF(filter.SourceObjectRecordType__c != null, filter.SourceObjectRecordType__c, 'All Types')}) - {!filter.TargetObjectType__c} ({!IF(filter.TargetObjectRecordType__c != null, filter.TargetObjectRecordType__c, 'All Types')})
+                            </div>
+                        </div>
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.Priority}">
+                        <apex:outputField value="{!filter.Priority__c}" />
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.CreateTasksForAlert}">
+                        <apex:outputField value="{!filter.CreateTasks__c}" rendered="{!OR(filter.MatchOnInsert__c == 'Report Duplicate', filter.MatchOnUpdate__c == 'Report Duplicate')}"/>
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.MatchOnInsert}">
+                        <apex:outputField value="{!filter.MatchOnInsert__c}" />
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.MatchOnUpdate}">
+                        <apex:outputField value="{!filter.MatchOnUpdate__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.Active}">
+                        <apex:outputField value="{!filter.Active__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.AutoMerge}">
+                        <apex:outputField value="{!filter.AutoMerge__c}" />
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.SearchAllRecords}">
+                        <apex:outputField value="{!filter.SearchAllRecords__c}" />
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.MatchLogic}">
+                        <apex:outputField value="{!filter.MatchLogic__c}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+            <apex:actionFunction name="deleteFilter" action="{!deleteFilter}"
+                                 reRender="filtersListSection" status="load">
+                <apex:param name="Delete"
+                            assignTo="{!objectId}"
+                            value=""/>
+            </apex:actionFunction>
+
+            <apex:outputpanel >
+                <apex:actionstatus id="load">
+                    <apex:facet name="start">
+                        <div class="waitingSearchDiv" id="el_loading"
+                             style="background-color: #fbfbfb; height: 100%; opacity: 0.45; width: 100%;">
+                            <div class="waitingHolder">
+                                <img class="waitingImage" src="{!$Resource.spinner}"/>
+                            </div>
+                        </div>
+                    </apex:facet>
+                </apex:actionstatus>
+            </apex:outputpanel>
+        </apex:form>
+</apex:page>

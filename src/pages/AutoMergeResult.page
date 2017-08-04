@@ -1,0 +1,23 @@
+<apex:page controller="AutoMergeResultCtrl" action="{!init}" title="Trigger Check" showHeader="true" sidebar="false">
+	<apex:stylesheet value="{!URLFOR($Resource.Deduper, 'bootstrap/css/bootstrap-namespacer.herokuapp.css')}"/>
+
+	<form>
+		<apex:outputPanel rendered="{!wasMerged}">
+			<div class="deduper">
+				<div class="container">
+					<div class="jumbotron">
+						<h3><apex:outputText value="{!infoMessage}" escape="false"/></h3>
+						<p>...</p>
+						<p><a class="btn btn-primary" href="{!redirectLink}" role="button">{!$Label.Continue}</a></p>
+					</div>
+				</div>
+			</div>
+		</apex:outputPanel>
+		<apex:outputPanel rendered="{!NOT(wasMerged)}">
+			<script>
+				window.location.href = '{!redirectLink}'
+			</script>
+		</apex:outputPanel>
+	</form>
+
+</apex:page>

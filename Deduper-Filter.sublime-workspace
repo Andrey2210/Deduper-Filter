@@ -1,0 +1,476 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ca",
+				"caseId"
+			],
+			[
+				"Case",
+				"CaseService\t[Custom Apex Class]"
+			],
+			[
+				"ma",
+				"margin-right"
+			],
+			[
+				"ow",
+				"overflow-x"
+			],
+			[
+				"fo",
+				"font-weight"
+			],
+			[
+				"up",
+				"updatedUser"
+			],
+			[
+				"user",
+				"userStatus"
+			],
+			[
+				"u",
+				"updatedUser"
+			],
+			[
+				"mar",
+				"margin-right"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"margin",
+				"margin-right"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"bord",
+				"border-color"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"tet",
+				"text-align"
+			],
+			[
+				"get",
+				"getFolderId"
+			],
+			[
+				"folde",
+				"folderId"
+			],
+			[
+				"background-c",
+				"background-color"
+			],
+			[
+				"ima",
+				"imageName"
+			],
+			[
+				"se",
+				"search"
+			],
+			[
+				"sea",
+				"searchName"
+			],
+			[
+				"fil",
+				"fileName"
+			],
+			[
+				"new",
+				"newImage"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"pageBlo",
+				"apex:pageBlockTable"
+			],
+			[
+				"page",
+				"apex:panelGrid"
+			],
+			[
+				"ad",
+				"PUBLIC addAll(LIST elements) \tvoid"
+			],
+			[
+				"S",
+				"Schedulable\t[Standard Apex Class]"
+			],
+			[
+				"co",
+				"contactList"
+			],
+			[
+				"Pa",
+				"ParkLocator\t[Custom Apex Class]"
+			],
+			[
+				"Par",
+				"ParkServiceMock\t[Custom Apex Class]"
+			],
+			[
+				"a",
+				"doAddResponse"
+			],
+			[
+				"do",
+				"doAddResponse"
+			],
+			[
+				"ani",
+				"animalName"
+			],
+			[
+				"Animal",
+				"AnimalLocator\t[Custom Apex Class]"
+			],
+			[
+				"lea",
+				"LeadProcessor"
+			],
+			[
+				"Lead",
+				"LeadProcessor\t[Custom Apex Class]"
+			],
+			[
+				"acc",
+				"accIds"
+			],
+			[
+				"Ac",
+				"AccountProcessor\t[Custom Apex Class]"
+			],
+			[
+				"i",
+				"Id"
+			],
+			[
+				"A",
+				"AccountId"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 81.0,
+		"last_filter": "package control sett",
+		"selected_items":
+		[
+			[
+				"package control sett",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"package control: ",
+				"Package Control: Add Channel"
+			],
+			[
+				"package control: up",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"pacage",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"Package control u",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"Package Control setti",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"Package Control: Install Package",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Install Package Control"
+			]
+		],
+		"width": 432.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/Deduper-Filter"
+	],
+	"file_history":
+	[
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/LightningTask/src/aura/RelatedContacts/RelatedContactsController.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/LightningTask/src/aura/ContactPropertyEdit/ContactPropertyEdit.css",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/User/mavensmate.sublime-settings",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/LightningTask/src/aura/ContactPropertyEdit/ContactPropertyEdit.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/LightningTask/src/aura/RelatedContacts/RelatedContacts.cmp",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/MavensMate/mavensmate.sublime-settings",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TrailheadP3/src/classes/HelloWorldController.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TrailheadP3/src/aura/SimilarProperties/SimilarPropertiesController.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/CaseService.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/CaseCloseResource.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/UnitOfWorkTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/ConcurrentSessionsPolicyCondition.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingList/campingList.css",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingList/campingList.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingList/campingListHelper.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/pages/ImageUploader.page",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/UserTableController.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/UsersTable/UsersTableController.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/UsersTable/UsersTable.css",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/UsersTable/UsersTable.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/LightningOutDependencyApp/LightningOutDependencyApp.app",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/CampingListController.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingList/campingListController.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/DocumentExt.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/ImageUploaderController.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingListItem/campingListItem.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/EinsteinVision_Admin.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingListForm/campingListFormHelper.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingListForm/campingListFormController.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingListForm/campingListForm.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingListItem/campingListItemController.js",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingHeader/campingHeader.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/addItemEvent/addItemEvent.evt",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/helloHeading/helloHeading.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/helloWorld/helloWorld.cmp",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/campingHeader/campingHeader.css",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/harnessApp/harnessApp.app",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/aura/helloWorld/helloWorld.css",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/DailyLeadProcessor.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/DailyLeadProcessorTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AddPrimaryContactTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AddPrimaryContact.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AccountManagerTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/CaseManager.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/CaseManagerTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AccountManager.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/ParkServiceMock.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/ParkService.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/ParkLocator.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/ParkLocatorTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AwesomeCalculator.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/CalculatorCalloutMock.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AwesomeCalculatorTest .cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AnimalController.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AnimalLocator.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/pages/AnimalsView.page",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/LeadProcessorTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/LeadProcessor.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AccountProcessor.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AccountProcessorTest.cls",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/pages/AccountList.page",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/src/classes/AccountHandler.cls-meta.xml",
+		"/C/Users/Andrey/Workspaces/my-mavensmate-workspace/TestProject/TestProject.sublime-project"
+	],
+	"find":
+	{
+		"height": 21.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"component",
+			"js",
+			"account",
+			"simpleRecord",
+			"loa",
+			" >",
+			"draggable",
+			"lds-p-horizontal_medium",
+			"center",
+			"Escalated",
+			"> ",
+			"ff7f00",
+			"image",
+			" \n",
+			"component",
+			");\n",
+			"type",
+			"');",
+			"final",
+			"expense",
+			"\t\t'Price__c' : 1111, \n\t\t'Quantity__c' : 12, \n",
+			">\n",
+			"Name",
+			">\n",
+			"Name",
+			"aura",
+			"<p>Name</p>\n",
+			"Name",
+			"NY",
+			"count",
+			"package control"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 21.0
+	},
+	"input":
+	{
+		"height": 29.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.MavensMate-OutputPanel":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "Deduper-Filter.sublime-project",
+	"replace":
+	{
+		"height": 38.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 322.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

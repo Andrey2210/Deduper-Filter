@@ -1,0 +1,16 @@
+{
+    "projectName": "Deduper-Filter",
+    "username": "dedup@twistellar.com",
+    "id": "4c486d80-7902-11e7-872c-f5924d46f22b",
+    "namespace": "",
+    "environment": "production",
+    "loginUrl": "https://login.salesforce.com/",
+    "workspace": "\\Users\\Andrey\\Workspaces\\my-mavensmate-workspace",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "StaticResource"
+    ]
+}

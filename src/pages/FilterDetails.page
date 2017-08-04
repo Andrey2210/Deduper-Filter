@@ -1,0 +1,286 @@
+<apex:page showHeader="true" sidebar="true" title="Filter Details" controller="FilterDetailsController">
+	<apex:stylesheet value="{!URLFOR($Resource.Deduper, 'bootstrap/css/bootstrap-namespacer.herokuapp.css')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Deduper, 'jquery/jquery-2.1.4.min.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Deduper, 'bootstrap/js/bootstrap.min.js')}"/>
+	<apex:outputLink value="/apex/Filters">{!$Label.BackToList}</apex:outputLink>
+	 <apex:sectionHeader title="{!$Label.ApplicationName}" subtitle="{!$Label.FilterDetails}"/>
+	  <apex:form Id="commonForm">
+		  <apex:pageMessages id="message"></apex:pageMessages>
+			  <apex:pageBlock id="filterSection">
+          <apex:actionFunction name="disableMatchOnCondition" action="{!disableMatchOnCondition}" reRender="filterSection" >
+          </apex:actionFunction>
+				  <apex:pageBlockButtons location="top">
+					  <apex:commandButton value="{!$Label.SaveFilter}" action="{!saveFilter}"
+										  styleClass="btn-sm btn-default"
+										  rerender="filterSection,message" status="load"/>
+				  </apex:pageBlockButtons>
+				  <apex:pageBlockSection >
+				  		<apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Name"/>
+                            <apex:inputText value="{!filterName}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                        </apex:pageBlockSectionItem>
+					  <apex:outputText value="{!filter.SourceObjectType__c} ({!filter.SourceObjectRecordType__c})" label="Source Object Type" rendered="{!isSourceObjectRecordTypeExists}"/>
+					  <apex:outputText value="{!filter.SourceObjectType__c}" label="Source Object Type" rendered="{!IF( isSourceObjectRecordTypeExists = true, false, true)}"/>
+					  <apex:outputText value="{!filter.TargetObjectType__c} ({!filter.TargetObjectRecordType__c})" label="Target Object Type" rendered="{!isTargetObjectRecordTypeExists}"/>
+					  <apex:outputText value="{!filter.TargetObjectType__c}" label="Target Object Type" rendered="{!IF( isTargetObjectRecordTypeExists = true, false, true)}"/>
+					  <apex:pageBlockSectionItem >
+					  </apex:pageBlockSectionItem>
+					  <apex:pageBlockSectionItem rendered="{!IF( statusesFlag = 0, true, false)}">
+                            <apex:outputLabel value="{!$Label.TargetObjectStatuses}"/>
+                            <apex:outputText value="{!$Label.NoTargetObjectStatusesAvailable}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!IF( statusesFlag = 0, false, true)}">
+                            <apex:outputLabel value="{!$Label.TargetObjectStatuses}"/>
+                            <apex:panelGrid columns="3" id="abcd" style="text-align: center;">
+                                <apex:outputLabel value="Available"/>
+                                <apex:outputLabel value=""/>
+                                <apex:outputLabel value="Selected"/>
+
+                                <apex:selectList id="sel1" value="{!leftSelected}" multiselect="true" style="width:150px" size="5">
+                                    <apex:selectOptions value="{!unselectedValues}" />
+                                </apex:selectList>
+                                    <apex:panelGroup >
+                                        <br/>
+                                        <apex:image value="{!$Resource.multiselected}">
+                                            <apex:actionSupport event="onclick" action="{!selectclick}" reRender="abcd,filterSection,filtersListSection,showmsg" status="load"/>
+                                        </apex:image>
+                                        <br/><br/>
+                                        <apex:image value="{!$Resource.multiunselected}">
+                                            <apex:actionSupport event="onclick" action="{!unselectclick}" reRender="abcd,filterSection,filtersListSection,showmsg" status="load"/>
+                                        </apex:image>
+                                    </apex:panelGroup>
+                                <apex:selectList id="sel2" value="{!rightSelected}" multiselect="true" style="width:150px" size="5">
+                                    <apex:selectOptions value="{!selectedValues}" />
+                                </apex:selectList>
+                            </apex:panelGrid>
+                        </apex:pageBlockSectionItem>
+					  	<apex:pageBlockSectionItem helpText="{!$Label.MatchOnConditionHelpText}">
+					  	  <apex:outputLabel value="{!$Label.MatchOnInsert}" />
+						  <apex:selectList value="{!selectedMatchOnInsert}" multiselect="false" size="1" disabled="{!isMatchOnConditionDisabled}">
+								<apex:actionSupport event="onchange"
+													reRender="filterSection,message"
+													status="load" />
+								<apex:selectOptions value="{!optionsMatchOnInsert}" />
+						  </apex:selectList>
+						</apex:pageBlockSectionItem>
+						<apex:pageBlockSectionItem helpText="{!$Label.MatchOnConditionHelpText}">
+					  	  <apex:outputLabel value="{!$Label.MatchOnUpdate}" />
+						  <apex:selectList value="{!selectedMatchOnUpdate}" multiselect="false" size="1"
+											 disabled="{!isMatchOnConditionDisabled}">
+								<apex:actionSupport event="onchange"
+													reRender="filterSection,message"
+													status="load" />
+								<apex:selectOptions value="{!optionsMatchOnUpdate}" />
+						  </apex:selectList>
+						 </apex:pageBlockSectionItem>
+						 <apex:pageBlockSectionItem helpText="{!$Label.ActiveCheckboxHelpText}">
+                            <apex:outputLabel value="{!$Label.Active}"/>
+					  		<apex:inputField value="{!filter.Active__c}" />
+					  	 </apex:pageBlockSectionItem>
+					  	 <apex:pageBlockSectionItem helpText="{!$Label.MatchLogicHelpText}">
+                              <apex:outputLabel value="{!$Label.MatchLogic}"/>
+							  <apex:selectList value="{!selectedMatchLogic}" multiselect="false" size="1">
+								  <apex:selectOptions value="{!optionsMatchLogic}" />
+							  </apex:selectList>
+						</apex:pageBlockSectionItem>
+						<apex:pageBlockSectionItem helpText="{!$Label.SearchAllRecordsHelpText}">
+                            <apex:outputLabel value="{!$Label.SearchAllRecords}"/>
+					   		<apex:inputField value="{!filter.SearchAllRecords__c}"/>
+					   	</apex:pageBlockSectionItem>
+					   	<apex:pageBlockSectionItem helpText="{!$Label.AutoMergeHelpText}" >
+                            <apex:outputLabel value="{!$Label.AutoMerge}"/>
+					   		<apex:inputCheckbox value="{!filter.AutoMerge__c}"
+										  onchange="disableMatchOnCondition();"/>
+						</apex:pageBlockSectionItem>
+						<apex:pageBlockSectionItem helpText="{!$Label.CreateTasksForAlertHelpText}" rendered="{!showTaskAction == true}">
+                            <apex:outputLabel value="{!$Label.CreateTasksForAlert}"/>
+							<apex:selectList value="{!selectedCreateTasks}" multiselect="false" size="1"
+											 >
+								  <apex:selectOptions value="{!optionsCreateTasks}" />
+							</apex:selectList>
+						</apex:pageBlockSectionItem>
+						<apex:pageBlockSectionItem helpText="{!$Label.PriorityHelpText}" >
+                            <apex:outputLabel value="{!$Label.Priority}"/>
+							<apex:selectList value="{!priority}" multiselect="false" size="1" >
+							  <apex:selectOptions value="{!items}"/>
+							</apex:selectList>
+						</apex:pageBlockSectionItem>
+						<apex:inputCheckbox value="{!createNewDataTask}" label="{!$Label.CreateNewDataTask}" rendered="{!IF(isSourceLead = true && isTargetLead = true, true, false)}"/>
+				  </apex:pageBlockSection>
+			  </apex:pageBlock>
+
+		  <apex:pageBlock Id="ruleSection">
+			  <apex:pageBlockButtons location="both">
+				  <apex:commandButton value="{!$Label.AddMatchingRule}" action="{!addRule}"
+									  styleClass="btn-sm btn-default" style="margin-left: 5px;"
+									  rerender="ruleSection,message" status="load"/>
+			  </apex:pageBlockButtons>
+			  <apex:pageBlockTable value="{!rules}" var="rule"
+								   rendered="{!rules.size != 0}" styleClass="table-hover">
+				   <apex:column headerValue="{!$Label.Action}">
+					  <apex:commandLink onclick="editRule('{!rule.Id}'); return false;"
+												rendered="{!rule.Id != objectId}"
+												styleClass="btn-sm btn-link">{!$Label.Edit}
+					  </apex:commandLink>
+					  <apex:commandLink onclick="if(!confirm('Are you sure?')){ return false; } deleteRule('{!rule.Id}'); return false;"
+										rendered="{!rule.Id != objectId}"
+										styleClass="btn-sm btn-link"
+										style="margin-left: 4px;">{!$Label.Delete}
+					  </apex:commandLink>
+					  <apex:commandLink onclick="saveRule(''); return false;"
+										rendered="{!rule.Id == objectId}"
+										styleClass="btn-sm btn-link"
+										style="margin-left: 4px;">{!$Label.Save}
+					  </apex:commandLink>
+					   <apex:commandLink onclick="cancelRule(''); return false;"
+										 rendered="{!rule.Id == objectId}"
+										 styleClass="btn-sm btn-link"
+										 style="margin-left: 4px;">{!$Label.Cancel}
+					  </apex:commandLink>
+				   </apex:column>
+				   <apex:column headerValue="{!$Label.SourceField}">
+					  <apex:selectList value="{!selectedSourceField}" multiselect="false" size="1"
+									   label="{!$Label.SourceField}" rendered="{!rule.Id == objectId}" >
+						  <apex:selectOptions value="{!sourceObjectFields}"/>
+						  <apex:actionSupport event="onchange" reRender="ruleSection,message"  status="load" />
+					  </apex:selectList>
+					  <apex:outputText value="{!objectFieldNamesDict[UPPER(selectedSourceObjectType)][UPPER(rule.SourceField__c)]}"
+										rendered="{!rule.Id != objectId}"/>
+				   </apex:column>
+				   <apex:column headerValue="{!$Label.TargetField}">
+					  <apex:selectList value="{!selectedTargetField}" multiselect="false" size="1"
+									   label="{!$Label.TargetField}"
+									   rendered="{!rule.Id == objectId && targetObjectFields.size != 0}">
+						  <apex:actionSupport event="onchange" reRender="ruleSection,message"  status="load" />
+						  <apex:selectOptions value="{!targetObjectFields}"/>
+					  </apex:selectList>
+					  <apex:outputText value="Nothing to match" rendered="{!rule.Id == objectId && targetObjectFields.size == 0}"/>
+					  <apex:outputText value="{!objectFieldNamesDict[UPPER(selectedTargetObjectType)][UPPER(rule.TargetField__c)]}"
+										rendered="{!rule.Id != objectId}"/>
+				   </apex:column>
+				   <apex:column headerValue="{!$Label.MatchApproach}">
+					  <apex:outputField value="{!rule.MatchingApproach__c}" rendered="{!rule.Id != objectId}"/>
+					  <apex:selectList value="{!selectedMachingAproach}" multiselect="false" size="1" rendered="{!rule.Id == objectId}">
+						  <apex:actionSupport event="onchange" reRender="ruleSection,message"  status="load" />
+						  <apex:selectOptions value="{!optionsMachingAproach}"/>
+					  </apex:selectList>
+				   </apex:column>
+				   <apex:column headerValue="{!$Label.FirstN}">
+					  <apex:outputField value="{!rule.FirstN__c}" rendered="{!rule.Id != objectId && rule.MatchingApproach__c != 'Exact'}"/>
+					  <apex:inputField value="{!rule.FirstN__c}" rendered="{!rule.Id == objectId && isEditFirstN == true}"/>
+				   </apex:column>
+				   <apex:column headerValue="{!$Label.MatchBlanks}">
+					   <apex:outputField value="{!rule.MatchBlanks__c}" rendered="{!rule.Id != objectId}"/>
+					   <apex:inputField value="{!rule.MatchBlanks__c}" rendered="{!rule.Id == objectId}"/>
+				   </apex:column>
+			  </apex:pageBlockTable>
+		  </apex:pageBlock>
+
+
+
+		  <apex:actionFunction name="deleteRule" action="{!deleteRule}"
+							   reRender="ruleSection,mergeRuleSection,message" status="load">
+			  <apex:param name="Delete"
+						  assignTo="{!objectId}"
+						  value=""/>
+		  </apex:actionFunction>
+		  <apex:actionFunction name="editRule" action="{!editRule}" reRender="ruleSection,mergeRuleSection,message" status="load">
+			  <apex:param name="Edit"
+						  assignTo="{!objectId}"
+						  value=""/>
+		  </apex:actionFunction>
+		  <apex:actionFunction name="saveRule" action="{!saveRules}" status="load" reRender="ruleSection,mergeRuleSection,message"/>
+		  <apex:actionFunction name="cancelRule" action="{!cancelRule}" status="load" reRender="ruleSection,mergeRuleSection,message"/>
+
+		  <apex:pageBlock Id="mergeRuleSection">
+			  <apex:pageBlockButtons location="both">
+				  <apex:commandButton value="{!$Label.AddMergingRule}" action="{!addMergeRule}"
+									  styleClass="btn-sm btn-default" style="margin-left: 5px;"
+									  rerender="mergeRuleSection,message" status="load"/>
+			  </apex:pageBlockButtons>
+			  <apex:pageBlockTable value="{!mergeRules}" var="mergeRule"
+								   rendered="{!mergeRules.size != 0}" styleClass="table-hover">
+				  <apex:column headerValue="{!$Label.Action}">
+					  <apex:outputLink onclick="editMergeRule('{!mergeRule.Id}'); return false;"
+												rendered="{!mergeRule.Id != objectId}"
+												styleClass="btn-sm btn-link">{!$Label.Edit}
+					  </apex:outputLink>
+					  <apex:outputLink onclick="if(!confirm('Are you sure?')){ return false; } deleteMergeRule('{!mergeRule.Id}'); return false;"
+										rendered="{!mergeRule.Id != objectId}"
+										styleClass="btn-sm btn-link"
+										style="margin-left: 4px;">{!$Label.Delete}
+					  </apex:outputLink>
+					  <apex:commandLink onclick="saveMergeRule(''); return false;"
+										rendered="{!mergeRule.Id == objectId}"
+										styleClass="btn-sm btn-link"
+										style="margin-left: 4px;">{!$Label.Save}
+					  </apex:commandLink>
+					   <apex:commandLink onclick="cancelMergeRule(''); return false;"
+										 rendered="{!mergeRule.Id == objectId}"
+										 styleClass="btn-sm btn-link"
+										 style="margin-left: 4px;">{!$Label.Cancel}
+					  </apex:commandLink>
+				  </apex:column>
+				  <apex:column headerValue="{!$Label.SourceField}">
+					  <apex:selectList value="{!selectedSourceField}" multiselect="false" size="1"
+									   rendered="{!mergeRule.Id == objectId}">
+						  <apex:selectOptions value="{!sourceObjectFields}"/>
+						  <apex:actionSupport event="onchange" reRender="mergeRuleSection,message"  status="load" />
+					  </apex:selectList>
+					  <apex:outputText value="{!objectFieldNamesDict[UPPER(selectedSourceObjectType)][UPPER(mergeRule.SourceField__c)]}"
+									   rendered="{!mergeRule.Id != objectId}"/>
+				  </apex:column>
+				  <apex:column headerValue="{!$Label.TargetField}">
+					   <apex:selectList value="{!selectedTargetField}" multiselect="false" size="1"
+									   rendered="{!mergeRule.Id == objectId && targetObjectFields.size != 0}">
+						  <apex:actionSupport event="onchange" reRender="mergeRuleSection,message"  status="load" />
+						  <apex:selectOptions value="{!targetObjectFields}"/>
+					  </apex:selectList>
+					  <apex:outputText value="Nothing to match" rendered="{!mergeRule.Id == objectId && targetObjectFields.size == 0}" />
+					  <apex:outputText value="{!objectFieldNamesDict[UPPER(selectedTargetObjectType)][UPPER(mergeRule.TargetField__c)]}"
+									   rendered="{!mergeRule.Id != objectId}"/>
+				  </apex:column>
+				  <apex:column headerValue="{!$Label.MergeBlanks}">
+					<apex:outputField value="{!mergeRule.MergeBlanks__c}" rendered="{!mergeRule.Id != objectId}"/>
+					<apex:inputField value="{!mergeRule.MergeBlanks__c}" rendered="{!mergeRule.Id == objectId}"/>
+				  </apex:column>
+				  <apex:column headerValue="{!$Label.MergeAction}">
+					<apex:outputField value="{!mergeRule.MergeAction__c}" rendered="{!mergeRule.Id != objectId}"/>
+					<apex:selectList value="{!selectedMergeAction}" multiselect="false" size="1"
+									   rendered="{!mergeRule.Id == objectId}">
+						  <apex:selectOptions value="{!optionsMergeAction}"/>
+				   </apex:selectList>
+				  </apex:column>
+			  </apex:pageBlockTable>
+		  </apex:pageBlock>
+		  <apex:actionFunction name="deleteMergeRule" action="{!deleteMergeRule}"
+							   reRender="ruleSection,mergeRuleSection,message" status="load">
+			  <apex:param name="Delete"
+						  assignTo="{!objectId}"
+						  value=""/>
+		  </apex:actionFunction>
+		  <apex:actionFunction name="editMergeRule" action="{!editMergeRule}" reRender="ruleSection,mergeRuleSection,message" status="load">
+			  <apex:param name="Edit"
+						  assignTo="{!objectId}"
+						  value=""/>
+		  </apex:actionFunction>
+		  <apex:actionFunction name="saveMergeRule" action="{!saveMergeRules}" status="load" reRender="ruleSection,mergeRuleSection,message"/>
+		  <apex:actionFunction name="cancelMergeRule" action="{!cancelMergeRule}" status="load" reRender="ruleSection,mergeRuleSection,message"/>
+	  </apex:form>
+
+	  <apex:outputpanel >
+		  <apex:actionstatus Id="load">
+			  <apex:facet name="start">
+				  <div class="waitingSearchDiv" Id="el_loading"
+					   style="background-color: #fbfbfb; height: 100%; opacity: 0.45; wIdth: 100%;">
+					  <div class="waitingHolder">
+						  <img class="waitingImage" src="{!$Resource.spinner}"/>
+					  </div>
+				  </div>
+			  </apex:facet>
+		  </apex:actionstatus>
+	  </apex:outputpanel>
+
+</apex:page>

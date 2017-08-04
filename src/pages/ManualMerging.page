@@ -1,0 +1,189 @@
+<apex:page showHeader="true" sidebar="false" title="Manual Merging" controller="ManualMergingCtrl" action="{!init}">
+	<apex:stylesheet value="{!URLFOR($Resource.Deduper, 'bootstrap/css/bootstrap-namespacer.herokuapp.css')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Deduper, 'jquery/jquery-2.1.4.min.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Deduper, 'bootstrap/js/bootstrap.min.js')}"/>
+
+	<apex:form id="table">
+		<div class="deduper">
+			<div class="page-header" style="margin-top: 5px;">
+				<h1>
+					<small>
+						{!IF(pageMessage != null, pageMessage, $Label.MergingPageTitle)}
+					</small>
+				</h1>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-4">
+
+					</div>
+					<div class="col-xs-8">
+						<apex:commandButton value="{!$Label.GoToHome}" action="{!goToHome}" rendered="{!pageMessage != null}" styleClass="btn btn-sm btn-danger"/>
+					</div>
+				</div>
+			</div>
+
+			<apex:messages />
+
+			<apex:outputPanel id="mergingBlock" rendered="{!pageMessage == null}">
+				<div class="container" style="overflow-x: auto; padding: 0px 0px 0px 0px;">
+					<table class="table table-bordered table-hover" style="margin-bottom: 0px;">
+						<thead>
+
+						</thead>
+
+						<tbody>
+							<th class="warning">
+								<div>
+									{!connectedFilter.SourceObjectType__c} / {!connectedFilter.TargetObjectType__c}
+								</div>
+							</th>
+
+							<th class="warning">
+								<div onclick="clearRecord(); return false;" style="cursor: pointer;">
+									<span class="glyphicon glyphicon-remove"/>
+									{!$Label.Result}
+								</div>
+							</th>
+
+							<apex:repeat value="{!sourceObjects}" var="id">
+								<th class="warning">
+									<div onclick="moveRecord('{!id}'); return false;" style="cursor: pointer;">
+										<span class="glyphicon glyphicon-triangle-left"/>
+										{!$Label.RecordName} {!sourceObjects[id]["Name"]}
+									</div>
+								</th>
+							</apex:repeat>
+
+							<apex:repeat value="{!targetObjects}" var="id">
+								<th class="warning">
+									<div onclick="moveRecord('{!id}');return false;" style="cursor: pointer;">
+										<span class="glyphicon glyphicon-triangle-left"/>
+										{!$Label.RecordName} {!targetObjects[id]["Name"]}
+									</div>
+								</th>
+							</apex:repeat>
+
+							<apex:repeat value="{!fieldsMap}" var="field">
+								<tr>
+									<apex:variable var="fieldValueVar" value="{!'Name'}"/>
+
+									<td class="active">
+										<div>
+											{!sourceFieldsMap[field].describe.label}
+											<apex:repeat value="{!fieldsMap[field]}" var="fieldValue">
+												/ {!targetFieldsMap[fieldValue].describe.label}
+												<apex:variable var="fieldValueVar" value="{!fieldValue}"/>
+											</apex:repeat>
+										</div>
+									</td>
+
+									<td class="success">
+										<div onclick="clearField('{!fieldValueVar}'); return false;" style="cursor: pointer;">
+											<span class="glyphicon glyphicon-remove"/>
+											<apex:outputField value="{!resultObject[fieldValueVar]}"/>
+										</div>
+									</td>
+
+									<apex:repeat value="{!sourceObjects}" var="id">
+										<td>
+											<div onclick="moveField('{!fieldValueVar}', '{!id}'); return false;" style="cursor: pointer;">
+												<span class="glyphicon glyphicon-triangle-left"/>
+												<apex:outputField value="{!sourceObjects[id][field]}"/>
+											</div>
+										</td>
+									</apex:repeat>
+
+									<apex:repeat value="{!targetObjects}" var="id">
+										<td>
+											<div onclick="moveField('{!fieldValueVar}', '{!id}'); return false;" style="cursor: pointer;">
+												<span class="glyphicon glyphicon-triangle-left"/>
+												<apex:outputField value="{!targetObjects[id][fieldValueVar]}"/>
+											</div>
+										</td>
+									</apex:repeat>
+								</tr>
+							</apex:repeat>
+
+							<apex:repeat value="{!requiredFields}" var="field">
+								<tr>
+									<td class="active">
+										<div>
+											{!$Label.Required}: {!field}
+										</div>
+									</td>
+
+									<td class="success">
+										<div onclick="clearField('{!field}'); return false;" style="cursor: pointer;">
+											<span class="glyphicon glyphicon-remove"/>
+											<apex:outputField value="{!resultObject[field]}"/>
+										</div>
+									</td>
+
+									<apex:repeat value="{!sourceObjects}" var="id">
+										<td>
+
+										</td>
+									</apex:repeat>
+
+									<apex:repeat value="{!targetObjects}" var="id">
+										<td>
+											<div onclick="moveField('{!field}', '{!id}'); return false;" style="cursor: pointer;">
+												<span class="glyphicon glyphicon-triangle-left"/>
+												<apex:outputField value="{!targetObjects[id][field]}"/>
+											</div>
+										</td>
+									</apex:repeat>
+								</tr>
+							</apex:repeat>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-4">
+
+						</div>
+						<div class="col-xs-8">
+							<div class="btn-group" role="group" style="margin-top: 20px;">
+								<apex:commandButton value="{!$Label.Cancel}" action="{!cancel}" styleClass="btn btn-sm btn-danger"/>
+								<apex:commandButton value="{!$Label.DeclineMerge}" action="{!decline}" styleClass="btn btn-sm btn-warning"/>
+								<apex:commandButton value="{!$Label.CompleteMerge}" action="{!complete}" styleClass="btn btn-sm btn-primary"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</apex:outputPanel>
+		</div>
+
+		<apex:actionFunction name="moveField" action="{!moveField}" status="status" reRender="table">
+			<apex:param name="field" value=""/>
+			<apex:param name="value" value=""/>
+		</apex:actionFunction>
+
+		<apex:actionFunction name="clearField" action="{!clearField}" status="status" reRender="table">
+			<apex:param name="field" value=""/>
+		</apex:actionFunction>
+
+		<apex:actionFunction name="moveRecord" action="{!moveRecord}" status="status" reRender="table">
+			<apex:param name="recordId" value=""/>
+		</apex:actionFunction>
+
+		<apex:actionFunction name="clearRecord" action="{!clearRecord}" status="status" reRender="table">
+		</apex:actionFunction>
+	</apex:form>
+
+	<apex:outputpanel >
+		<apex:actionstatus id="status">
+			<apex:facet name="start">
+				<div class="waitingSearchDiv" Id="el_loading" style="background-color: #fbfbfb; height: 100%; opacity: 0.45; wIdth: 100%;">
+					<div class="waitingHolder">
+						<img class="waitingImage" src="{!$Resource.spinner}"/>
+					</div>
+				</div>
+			</apex:facet>
+		</apex:actionstatus>
+	</apex:outputpanel>
+
+</apex:page>

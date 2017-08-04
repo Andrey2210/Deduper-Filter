@@ -1,0 +1,11 @@
+<apex:page standardController="Order" showHeader="true" sidebar="true">
+    <apex:includeScript value="{!URLFOR($Resource.AddGetParameterScript)}"/>
+
+    <script>
+        var url = parent.window.location.href;
+        url = setPageAddress(url, '/801/e');
+        url = setGetParameter(url, 'nooverride', '1');
+        url = deleteGetParameter(url, 'save_new');
+        window.location.href = setGetParameter(url, 'saveURL', 'apex/AutoMergeResult');
+    </script>
+</apex:page>
